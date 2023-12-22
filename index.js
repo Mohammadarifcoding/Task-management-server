@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const port = 3000
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors')
 
 
@@ -51,6 +51,21 @@ async function run() {
 
   })
 
+
+  app.put('/updateTask/:status/:id',async(req,res)=>{
+    const status = req.params.status
+    const Id = req.params.id
+    const query = { _id : new ObjectId(Id)  }
+    const updateDoc = {
+      $set:{
+        status : status
+      }
+    }
+
+    const result = await Tasks.updateOne(query,updateDoc)
+    res.send(result)
+    
+  })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
